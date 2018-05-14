@@ -55,4 +55,10 @@ ostream& operator<<(ostream& os, BigInt const& integer){
     return os;
 }
 
+istream& operator>>(istream& is, BigInt& integer){
+    string buf; cin>>buf;
+    integer = BigInt(buf);
+    return is;
+}
+
 }
