@@ -1,12 +1,15 @@
 #ifndef __INTEGER_HPP__
 #define __INTEGER_HPP__
 
+#include <bits/stdc++.h>
+
 namespace ECC{
 
 typedef long long ll;
 using namespace std;
 
 class BigInt{
+    static ll const dMax;
     vector<ll> val;
 public:
     BigInt();
