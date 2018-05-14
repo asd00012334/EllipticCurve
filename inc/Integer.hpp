@@ -22,11 +22,11 @@ public:
     friend BigInt operator*(BigInt const& l, BigInt const& r);
     friend BigInt operator/(BigInt const& l, BigInt const& r);
     friend BigInt operator%(BigInt const& l, BigInt const& r);
-    friend BigInt operator<(BigInt const& l, BigInt const& r);
-    friend BigInt operator>(BigInt const& l, BigInt const& r);
-    friend BigInt operator<=(BigInt const& l, BigInt const& r);
-    friend BigInt operator>=(BigInt const& l, BigInt const& r);
-    friend BigInt operator==(BigInt const& l, BigInt const& r);
+    friend bool operator<(BigInt const& l, BigInt const& r);
+    friend bool operator>(BigInt const& l, BigInt const& r);
+    friend bool operator<=(BigInt const& l, BigInt const& r);
+    friend bool operator>=(BigInt const& l, BigInt const& r);
+    friend bool operator==(BigInt const& l, BigInt const& r);
 
     operator string()const;
     friend ostream& operator<<(ostream& os, BigInt const& integer);
