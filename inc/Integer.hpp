@@ -10,8 +10,8 @@ using namespace std;
 
 class BigInt{
     static ll const dMax;
-    int sign;
     vector<ll> val;
+    int sign;
 public:
     BigInt();
     BigInt(ll val);
@@ -28,6 +28,7 @@ public:
     friend BigInt operator>=(BigInt const& l, BigInt const& r);
     friend BigInt operator==(BigInt const& l, BigInt const& r);
 
+    operator string()const;
     friend ostream& operator<<(ostream& os, BigInt const& integer);
     friend istream& operator>>(istream& is, BigInt& integer);
 };
