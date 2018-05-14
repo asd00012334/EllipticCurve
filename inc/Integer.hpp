@@ -10,6 +10,7 @@ using namespace std;
 
 class BigInt{
     static ll const dMax;
+    int sign;
     vector<ll> val;
 public:
     BigInt();
