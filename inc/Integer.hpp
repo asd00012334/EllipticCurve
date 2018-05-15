@@ -40,6 +40,8 @@ public:
     friend bool operator>=(BigInt const& l, BigInt const& r);
     friend bool operator==(BigInt const& l, BigInt const& r);
 
+    void swap(BigInt& right);
+
     operator string()const;
     friend ostream& operator<<(ostream& os, BigInt const& integer);
     friend istream& operator>>(istream& is, BigInt& integer);
