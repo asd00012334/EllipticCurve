@@ -3,7 +3,7 @@
 
 namespace ECC{
 
-ll const BigInt::dMax = 1e9;
+ll const BigInt::dMax = 1e6;
 
 BigInt::BigInt(): val(1,0){}
 
@@ -54,8 +54,8 @@ BigInt::operator string()const{
 BigInt operator*(BigInt const& l, BigInt const& r){
     int len = l.val.size() + r.val.size();
     if(len&(len-1)) len = 1<<__lg(len<<1);
-    vector<complex<double> > lval(l.val.begin(),l.val.end());
-    vector<complex<double> > rval(r.val.begin(),r.val.end());
+    vector<complex<long double> > lval(l.val.begin(),l.val.end());
+    vector<complex<long double> > rval(r.val.begin(),r.val.end());
     lval.resize(len);
     rval.resize(len);
     fft(lval.begin(), lval.end());
@@ -65,9 +65,14 @@ BigInt operator*(BigInt const& l, BigInt const& r){
         lval[i] *= rval[i];
     ifft(lval.begin(), lval.end());
     BigInt out;
-    out.val.resize(len);
+    out.val.resize(len,0);
     for(int i=0;i<len;++i)
         out.val[i] = round(lval[i].real());
+    for(int i=0;i<len-1;++i)
+        if(out.val[i]>=BigInt::dMax){
+            out.val[i+1] += out.val[i]/BigInt::dMax;
+            out.val[i] %= BigInt::dMax;
+        }
     while(out.val.size()>1 && out.val.back() == 0)
         out.val.pop_back();
     out.sign = !(l.sign ^ r.sign);
