@@ -6,7 +6,7 @@
 namespace ECC{
 
 using namespace std;
-static const int BIT_CNT 21;
+static const int BIT_CNT = 21;
 
 int directReverse(int,int);
 int bitReverse(int,int);
@@ -38,7 +38,6 @@ template<typename iter>
 void fft(iter begin, iter end){
     /// Assume end-begin is 2 power
     typedef typename iterator_traits<iter>::value_type type;
-    type sqt2 = sqrt(2);
     int size = end-begin;
     bitShuffle(begin,size);
     for(int hsize=1;hsize<size;hsize<<=1){
@@ -48,8 +47,8 @@ void fft(iter begin, iter end){
             type w = 1, dw = exp(type(0,-pi/hsize));
             for(int k=0;k<hsize;k++, w*=dw){
                 type even = base[k], odd = w*mid[k];
-                base[k] = (even+odd)/sqt2;
-                mid[k] = (even-odd)/sqt2;
+                base[k] = (even+odd);
+                mid[k] = (even-odd);
             }
         }
     }
@@ -59,7 +58,6 @@ template<typename iter>
 void ifft(iter begin, iter end){
     /// Assume end-begin is 2 power
     typedef typename iterator_traits<iter>::value_type type;
-    type sqt2 = sqrt(2);
     int size = end-begin;
     bitShuffle(begin,size);
     for(int hsize=1;hsize<size;hsize<<=1){
@@ -69,8 +67,8 @@ void ifft(iter begin, iter end){
             type w = 1, dw = exp(type(0,pi/hsize));
             for(int k=0;k<hsize;k++, w*=dw){
                 type even = base[k], odd = w*mid[k];
-                base[k] = (even+odd)/sqt2;
-                mid[k] = (even-odd)/sqt2;
+                base[k] = (even+odd)/type(2);
+                mid[k] = (even-odd)/type(2);
             }
         }
     }
