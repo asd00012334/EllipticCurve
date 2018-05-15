@@ -1,4 +1,5 @@
 #include "Integer.hpp"
+#include "fft.hpp"
 
 namespace ECC{
 
@@ -47,6 +48,29 @@ BigInt::operator string()const{
     if(!sign) out.push_back('-');
     out += buf.substr(trailZero,buf.size()-trailZero);
     if(out.empty() || !sign && out.size()==1) out = "0";
+    return out;
+}
+
+BigInt operator*(BigInt const& l, BigInt const& r){
+    int len = l.val.size() + r.val.size();
+    if(len&(len-1)) len = 1<<__lg(len<<1);
+    vector<complex<double> > lval(l.val.begin(),l.val.end());
+    vector<complex<double> > rval(r.val.begin(),r.val.end());
+    lval.resize(len);
+    rval.resize(len);
+    fft(lval.begin(), lval.end());
+    fft(rval.begin(), rval.end());
+
+    for(int i=0;i<len;++i)
+        lval[i] *= rval[i];
+    ifft(lval.begin(), lval.end());
+    BigInt out;
+    out.val.resize(len);
+    for(int i=0;i<len;++i)
+        out.val[i] = round(lval[i].real());
+    while(out.val.size()>1 && out.val.back() == 0)
+        out.val.pop_back();
+    out.sign = !(l.sign ^ r.sign);
     return out;
 }
 
