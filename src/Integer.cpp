@@ -95,6 +95,11 @@ BigInt operator*(BigInt const& l, BigInt const& r){
     return out;
 }
 
+void BigInt::swap(BigInt& right){
+    val.swap(right.val);
+    std::swap(sign,right.sign);
+}
+
 ostream& operator<<(ostream& os, BigInt const& integer){
     os << string(integer);
     return os;
