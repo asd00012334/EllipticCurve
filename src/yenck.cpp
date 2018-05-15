@@ -2,21 +2,11 @@
 
 namespace ECC{
 
-//extern ll const BigInt::dMax;
 
-/*BigInt::BigInt(BigInt const& r)
+void nega(BigInt &l)
 {
-	val = r.val;
-	sign = r.sign;
+	l.sign = !l.sign;
 }
-
-BigInt& BigInt::operator=(BigInt const& r){
-	val = r.val;
-	sign = r.sign;
-	return *this;
-}*/
-
-
 bool operator<(vector<ll>& l, vector<ll>& r)
 {
 	if(l.size() != r.size())
@@ -79,10 +69,6 @@ void __sub(BigInt &l, BigInt const& r)
 	}
 }
 
-void nega(BigInt &l)
-{
-	l.sign = !l.sign;
-}
 
 BigInt& operator+=(BigInt& l, BigInt const& r)
 {

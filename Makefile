@@ -1,5 +1,5 @@
 CXX = g++
-FLAGS = -O3
+FLAGS = 
 INC = -I ./inc/
 
 RM = rm -f
