@@ -3,7 +3,7 @@
 
 namespace ECC{
 
-ll const BigInt::dMax = 1e6;
+ll const BigInt::dMax = 1<<20;
 
 BigInt::BigInt(): val(1,0){}
 
@@ -15,17 +15,33 @@ BigInt::BigInt(ll vin): val(1,vin){
     }
 }
 
-BigInt::BigInt(string const& decimal){
-    sign = decimal[0]!='-';
+inline int hexToDigit(char ascii){
+    if(isdigit(ascii))
+        return ascii - '0';
+    else if('a'<=ascii && ascii <='z')
+        return ascii-'a'+10;
+    else if('A'<=ascii && ascii<='Z')
+        return ascii-'A'+10;
+    else assert(0);
+}
+
+inline char digitToHex(int digit){
+    if(digit<10) return digit+'0';
+    else if(digit<16) return digit-10+'a';
+    else assert(0);
+}
+
+BigInt::BigInt(string const& hexadecimal){
+    sign = hexadecimal[0]!='-';
     ll carry = 0;
     ll base = 1;
-    for(int i=decimal.size() - 1; i >= (!sign); --i){
-        carry += base*(decimal[i]-'0');
+    for(int i=hexadecimal.size() - 1; i >= (!sign); --i){
+        carry += base*hexToDigit(hexadecimal[i]);
         if(base >= dMax){
-            base = 10;
+            base = 16;
             val.push_back(carry%dMax);
             carry /= dMax;
-        } else base*=10;
+        } else base*=16;
     }
     val.push_back(carry);
 }
@@ -34,9 +50,9 @@ BigInt::operator string()const{
     string buf;
     for(int i=0;i<val.size();++i){
         ll tmp = val[i];
-        for(int p=BigInt::dMax; p>=10; p/=10){
-            buf.push_back('0'+tmp%10);
-            tmp /= 10;
+        for(int p=BigInt::dMax; p>=16; p/=16){
+            buf.push_back( digitToHex(tmp%16) );
+            tmp /= 16;
         }
     }
     reverse(buf.begin(),buf.end());
@@ -77,6 +93,11 @@ BigInt operator*(BigInt const& l, BigInt const& r){
         out.val.pop_back();
     out.sign = !(l.sign ^ r.sign);
     return out;
+}
+
+void BigInt::swap(BigInt& right){
+    val.swap(right.val);
+    std::swap(sign,right.sign);
 }
 
 ostream& operator<<(ostream& os, BigInt const& integer){
