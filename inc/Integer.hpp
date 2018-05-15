@@ -12,11 +12,23 @@ class BigInt{
     static ll const dMax;
     vector<ll> val;
     int sign;
+	friend void sub(BigInt&, BigInt const&);
+	friend void __sub(BigInt&, BigInt const&);
+	friend void add(BigInt&, BigInt const&);
+	friend void nega(BigInt&);
+	
 public:
     BigInt();
     BigInt(ll val);
     BigInt(string const& decimal);
+	//BigInt(BigInt const& r);
+	//BigInt& operator=(BigInt const& r);
 
+	friend BigInt& operator+=(BigInt&, BigInt const&);
+	friend BigInt& operator-=(BigInt&, BigInt const&);
+	friend BigInt& operator*=(BigInt&, BigInt const&);
+	friend BigInt& operator/=(BigInt&, BigInt const&);
+	friend BigInt& operator%=(BigInt&, BigInt const&);
     friend BigInt operator+(BigInt const& l, BigInt const& r);
     friend BigInt operator-(BigInt const& l, BigInt const& r);
     friend BigInt operator*(BigInt const& l, BigInt const& r);
