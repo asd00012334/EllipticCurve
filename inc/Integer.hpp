@@ -16,7 +16,7 @@ class BigInt{
     friend void __sub(BigInt&, BigInt const&);
     friend void add(BigInt&, BigInt const&);
     friend void nega(BigInt&);
-	
+
 public:
     BigInt();
     BigInt(ll val);
@@ -24,21 +24,21 @@ public:
 	//BigInt(BigInt const& r);
 	//BigInt& operator=(BigInt const& r);
 
-    friend BigInt& operator+=(BigInt&, BigInt const&);
-    friend BigInt& operator-=(BigInt&, BigInt const&);
-    friend BigInt& operator*=(BigInt&, BigInt const&);
-    friend BigInt& operator/=(BigInt&, BigInt const&);
-    friend BigInt& operator%=(BigInt&, BigInt const&);
-    friend BigInt operator+(BigInt const& l, BigInt const& r);
-    friend BigInt operator-(BigInt const& l, BigInt const& r);
-    friend BigInt operator*(BigInt const& l, BigInt const& r);
-    friend BigInt operator/(BigInt const& l, BigInt const& r);
-    friend BigInt operator%(BigInt const& l, BigInt const& r);
-    friend bool operator<(BigInt const& l, BigInt const& r);
-    friend bool operator>(BigInt const& l, BigInt const& r);
-    friend bool operator<=(BigInt const& l, BigInt const& r);
-    friend bool operator>=(BigInt const& l, BigInt const& r);
-    friend bool operator==(BigInt const& l, BigInt const& r);
+    BigInt& operator+=(BigInt const&);
+    BigInt& operator-=(BigInt const&);
+    BigInt& operator*=(BigInt const&);
+    BigInt& operator/=(BigInt const&);
+    BigInt& operator%=(BigInt const&);
+    BigInt operator+(BigInt const& r)const;
+    BigInt operator-(BigInt const& r)const;
+    BigInt operator*(BigInt const& r)const;
+    BigInt operator/(BigInt const& r)const;
+    BigInt operator%(BigInt const& r)const;
+    bool operator<(BigInt const& r)const;
+    bool operator>(BigInt const& r)const;
+    bool operator<=(BigInt const& r)const;
+    bool operator>=(BigInt const& r)const;
+    bool operator==(BigInt const& r)const;
 
     void swap(BigInt& right);
 
@@ -49,21 +49,32 @@ public:
 
 template<typename Int>
 class Zm{
-    Int val, mod;
+    Int mod;
 public:
-    Zm(Int const& mod);
-    Zm(Int const& val, Int const& mod);
+    Element zero()const;
 
-    friend BigInt operator+(BigInt const& l, BigInt const& r);
-    friend BigInt operator-(BigInt const& l, BigInt const& r);
-    friend BigInt operator*(BigInt const& l, BigInt const& r);
-    friend BigInt operator/(BigInt const& l, BigInt const& r);
-    friend BigInt operator==(BigInt const& l, BigInt const& r);
+    class Element{
+        Zm const* type;
+        Int val;
+    public:
+        Element(Int const& mod);
+        Element(Int const& val, Int const* mod);
 
-    friend ostream& operator<<(ostream& os, BigInt const& integer);
-    friend istream& operator>>(istream& is, BigInt& integer);
+        Element operator+(Element const& r)const;
+        Element operator-(Element const& r)const;
+        Element operator*(Element const& r)const;
+        Element operator/(Element const& r)const;
+        Element operator==(Element const& r)const;
+
+        friend ostream& operator<<(ostream& os, Element const& integer);
+        friend istream& operator>>(istream& is, Element& integer);
+    };
+
+
 };
 
 }
+
+
 
 #endif // __INTEGER_HPP__
