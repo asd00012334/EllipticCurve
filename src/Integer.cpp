@@ -4,12 +4,16 @@
 namespace ECC{
 
 template<typename Vec>
-void reduce(Vec& arr, int& sign){
+void reduce(Vec& arr, int& sign, int lenMax=INT_MAX){
     if(arr.empty()) arr.push_back(0);
-    while(arr.size()>1)
+    while(arr.size()>=1)
         if(arr.back()==0) arr.pop_back();
         else break;
     if(arr.size()==1 && arr[0]==0) sign = 1;
+    if(arr.size()<=lenMax) return;
+    for(int i=0;i<lenMax;++i)
+        arr[i] = arr[arr.size()-lenMax+i];
+    arr.resize(lenMax);
 }
 
 ll const BigInt::dMax = 1<<20;
@@ -31,13 +35,13 @@ inline int hexToDigit(char ascii){
         return ascii-'a'+10;
     else if('A'<=ascii && ascii<='Z')
         return ascii-'A'+10;
-    else assert(0);
+    else throw "hex to digit error";
 }
 
 inline char digitToHex(int digit){
     if(digit<10) return digit+'0';
     else if(digit<16) return digit-10+'a';
-    else assert(0);
+    else throw "digit to hex error";
 }
 
 BigInt::BigInt(string const& hexadecimal){
@@ -151,12 +155,14 @@ BigInt BigInt::operator/(BigInt const& r)const{
 
     /// TODO: fix this iteration count
     for(int i=0;i<30;++i){
+        cout << a.frac<<"!!\n";
         BigFloat c(2,0);
         c -= b*a;
         a = a*c;
+        reduce(a.frac.val,a.frac.sign,r.val.size()+5);
     }
-    out.val.resize(a.frac.val.size()-a.offset);
     a = a*BigFloat(*this);
+    out.val.resize(a.frac.val.size()-a.offset);
     for(int i=a.offset;i<a.frac.val.size();++i)
         out.val[i-a.offset] = a.frac.val[i];
     reduce(out.val, out.sign);
@@ -284,3 +290,4 @@ BigInt BigInt::operator-(BigInt const& r)const{
 }
 
 }
+
