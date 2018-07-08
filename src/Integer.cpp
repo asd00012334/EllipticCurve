@@ -288,14 +288,3 @@ BigInt BigInt::operator-(BigInt const& r)const{
 
 }
 
-int main(){
-    std::string s;
-    for(int i=0;i<1000;++i) s.push_back('f');
-    ECC::BigInt t1, t2(-2);
-    t1.swap(t2);
-    std::cout<<t1*t1*t1<<"\n";
-    for(int i=0;i<1000;++i)
-        t1*t1;
-    std::cout<< (ECC::BigInt)5 <<"\n";
-    std::cout<< ((ECC::BigInt)5/2);
-}
