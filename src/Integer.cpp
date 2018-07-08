@@ -4,12 +4,13 @@
 namespace ECC{
 
 template<typename Vec>
-void reduce(Vec& arr, int& sign){
+void reduce(Vec& arr, int& sign, int lenMax=INT_MAX){
     if(arr.empty()) arr.push_back(0);
-    while(arr.size()>1)
+    while(arr.size()>=1)
         if(arr.back()==0) arr.pop_back();
         else break;
     if(arr.size()==1 && arr[0]==0) sign = 1;
+    if(arr.size()>lenMax) arr.resize(lenMax);
 }
 
 ll const BigInt::dMax = 1<<20;
@@ -151,9 +152,11 @@ BigInt BigInt::operator/(BigInt const& r)const{
 
     /// TODO: fix this iteration count
     for(int i=0;i<30;++i){
+        cout<<a.frac.val.size()<<"!!\n";
         BigFloat c(2,0);
         c -= b*a;
         a = a*c;
+        reduce(a.frac.val,a.frac.sign,r.val.size()+5);
     }
     out.val.resize(a.frac.val.size()-a.offset);
     a = a*BigFloat(*this);
