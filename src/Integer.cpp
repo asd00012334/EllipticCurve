@@ -222,9 +222,12 @@ void sub(BigInt &l, BigInt const& r)
 		__sub(l, r);
 	else
 	{
+		int sign = !l.sign;
 		BigInt x = l;
-		nega(l = r);
-		__sub(l, x);
+		l = r;
+		__sub(l, x); // r - l
+		l.sign = sign;
+		
 	}
 
 }
