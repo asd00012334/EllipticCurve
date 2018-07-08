@@ -3,11 +3,20 @@
 
 namespace ECC{
 
+template<typename Vec>
+void reduce(Vec& arr, int& sign){
+    if(arr.empty()) arr.push_back(0);
+    while(arr.size()>1)
+        if(arr.back()==0) arr.pop_back();
+        else break;
+    if(arr.size()==1 && arr[0]==0) sign = 1;
+}
+
 ll const BigInt::dMax = 1<<20;
 
-BigInt::BigInt(): val(1,0){}
+BigInt::BigInt(): val(1,0), sign(1){}
 
-BigInt::BigInt(ll vin): val(1,vin){
+BigInt::BigInt(ll vin): val(1,abs(vin)), sign(vin>=0){
     if(val.back() >= dMax){
         ll carryOut = val.back()/dMax;
         val.back() %= dMax;
@@ -67,9 +76,9 @@ BigInt::operator string()const{
     return out;
 }
 
-BigInt BigInt::operator*(BigInt const& r) const{
+BigInt BigInt::operator*(BigInt const& r)const{
     BigInt const& l = *this;
-	int len = l.val.size() + r.val.size();
+    int len = l.val.size() + r.val.size();
     if(len&(len-1)) len = 1<<__lg(len<<1);
     vector<complex<long double> > lval(l.val.begin(),l.val.end());
     vector<complex<long double> > rval(r.val.begin(),r.val.end());
@@ -96,6 +105,65 @@ BigInt BigInt::operator*(BigInt const& r) const{
     return out;
 }
 
+template<typename Vec>
+void shiftBack(Vec& arr, int n){
+    arr.resize(arr.size()+n);
+    for(int i=arr.size()-1;i>=n;--i)
+        arr[i] = arr[i-n];
+    for(int i=0;i<n;++i)
+        arr[i] = 0;
+}
+
+BigInt BigInt::operator/(BigInt const& r)const{
+
+    struct BigFloat{
+        BigInt frac;
+        int offset;
+
+        BigFloat(): frac(0), offset(0){}
+        BigFloat(BigInt const& i): frac(i), offset(0){}
+        BigFloat(int val, int offset):frac(val),offset(offset){}
+
+        BigFloat operator*(BigFloat const& r)const{
+            BigFloat out;
+            out.frac = frac * r.frac;
+            out.offset = offset + r.offset;
+            return out;
+        }
+
+        BigFloat& operator-=(BigFloat r){
+            if(offset > r.offset){
+                offset -= r.offset;
+                shiftBack(frac.val,offset);
+            } else{
+                r.offset -= offset;
+                shiftBack(r.frac.val,r.offset);
+            }
+            frac -= r.frac;
+            return *this;
+        }
+    };
+
+    BigInt out;
+    out.sign = !(sign^r.sign);
+
+    BigFloat a(1,-r.val.size()), b(r);
+
+    /// TODO: fix this iteration count
+    for(int i=0;i<30;++i){
+        BigFloat c(2,0);
+        c -= b*a;
+        a = a*c;
+    }
+    out.val.resize(a.frac.val.size()-a.offset);
+    a = a*BigFloat(*this);
+    for(int i=a.offset;i<a.frac.val.size();++i)
+        out.val[i-a.offset] = a.frac.val[i];
+    reduce(out.val, out.sign);
+    return out;
+
+}
+
 void BigInt::swap(BigInt& right){
     val.swap(right.val);
     std::swap(sign,right.sign);
@@ -110,6 +178,106 @@ istream& operator>>(istream& is, BigInt& integer){
     string buf; cin>>buf;
     integer = BigInt(buf);
     return is;
+}
+
+
+void nega(BigInt &l)
+{
+	l.sign = !l.sign;
+}
+bool operator<(vector<ll>& l, vector<ll>& r)
+{
+	if(l.size() != r.size())
+		return l.size() < r.size();
+	for(int i = l.size() - 1; i >= 0; i++)
+		if(l[i] != r[i])
+			return l[i] < r[i];
+	return 0;
+}
+
+void add(BigInt &l, BigInt const& r)
+{
+	vector<ll>& L = l.val;
+	const vector<ll>& R = r.val;
+	int MaxLen = max(L.size(), R.size());
+	int MinLen = min(L.size(), R.size());
+	L.resize(MaxLen + 1, 0);
+	for(int i = 0; i < R.size(); ++i)
+		L[i] += R[i];
+	for(int i = 0; i < MaxLen; ++i)
+	{
+		if(L[i] >= BigInt::dMax)
+		{
+			L[i + 1] += 1;
+			L[i] -= BigInt::dMax;
+		}
+	}
+	if(L.back() == 0)
+		L.pop_back();
+}
+
+void sub(BigInt &l, BigInt const& r)
+{
+	if(l.val > r.val)
+		__sub(l, r);
+	else
+	{
+		BigInt x = l;
+		nega(l = r);
+		__sub(l, x);
+	}
+
+}
+
+void __sub(BigInt &l, BigInt const& r)
+{
+	vector<ll>& L = l.val;
+	const vector<ll>& R = r.val;
+	int MaxLen = max(L.size(), R.size());
+	int MinLen = min(L.size(), R.size());
+	for(int i = 0; i < MinLen; ++i)
+		L[i] -= R[i];
+	for(int i = 0; i < MaxLen; ++i)
+	{
+		if(L[i] < 0)
+		{
+			L[i + 1] -= 1;
+			L[i] += BigInt::dMax;
+		}
+	}
+}
+
+
+BigInt& BigInt::operator+=(BigInt const& r){
+	BigInt& l = *this;
+	if(l.sign == r.sign)
+		add(l, r);
+	else
+		sub(l, r);
+	return l;
+}
+
+BigInt& BigInt::operator-=(BigInt const& r){
+    BigInt& l = *this;
+	if(l.sign == r.sign)
+		sub(l, r);
+	else
+		add(l, r);
+	return l;
+}
+
+BigInt BigInt::operator+(BigInt const& r)const{
+    BigInt const& l = *this;
+	BigInt ret(l);
+	ret += r;
+	return ret;
+}
+
+BigInt BigInt::operator-(BigInt const& r)const{
+	BigInt const& l = *this;
+	BigInt ret(l);
+	ret -= r;
+	return ret;
 }
 
 }
