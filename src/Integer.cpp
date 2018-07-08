@@ -4,13 +4,19 @@
 namespace ECC{
 
 template<typename Vec>
-void reduce(Vec& arr, int& sign, int lenMax=INT_MAX){
+void reduce(Vec& arr, int& sign){
     if(arr.empty()) arr.push_back(0);
     while(arr.size()>=1)
         if(arr.back()==0) arr.pop_back();
         else break;
     if(arr.size()==1 && arr[0]==0) sign = 1;
+}
+
+template<typename Vec>
+void precision(Vec& arr, int& sign, int& offset, int lenMax=INT_MAX){
+    reduce(arr,sign);
     if(arr.size()<=lenMax) return;
+    offset += arr.size()-lenMax;
     for(int i=0;i<lenMax;++i)
         arr[i] = arr[arr.size()-lenMax+i];
     arr.resize(lenMax);
@@ -45,11 +51,7 @@ inline char digitToHex(int digit){
 }
 
 BigInt::BigInt(string const& hexadecimal){
-	if(hexadecimal.empty())
-		throw "empty input";
     sign = hexadecimal[0]!='-';
-	if(!sign && hexadecimal.size() < 2)
-		throw "invalid input";
     ll carry = 0;
     ll base = 1;
     for(int i=hexadecimal.size() - 1; i >= (!sign); --i){
@@ -127,15 +129,18 @@ BigInt BigInt::operator/(BigInt const& r)const{
     struct BigFloat{
         BigInt frac;
         int offset;
-
-        BigFloat(): frac(0), offset(0){}
-        BigFloat(BigInt const& i): frac(i), offset(0){}
-        BigFloat(int val, int offset):frac(val),offset(offset){}
+        int lenMax;
+        BigFloat(int lenMax): frac(0), offset(0), lenMax(lenMax){}
+        BigFloat(BigInt const& i, int lenMax): frac(i), offset(0), lenMax(lenMax){}
+        BigFloat(int val, int offset, int lenMax):
+            frac(val),offset(offset),lenMax(lenMax){}
 
         BigFloat operator*(BigFloat const& r)const{
-            BigFloat out;
+            int lenMax = min(lenMax,r.lenMax);
+            BigFloat out(lenMax);
             out.frac = frac * r.frac;
             out.offset = offset + r.offset;
+            precision(out.frac.val,out.frac.sign,out.offset,lenMax);
             return out;
         }
 
@@ -155,17 +160,16 @@ BigInt BigInt::operator/(BigInt const& r)const{
     BigInt out;
     out.sign = !(sign^r.sign);
 
-    BigFloat a(1,-r.val.size()), b(r);
-
+    int lenMax = r.val.size()+5;
+    BigFloat a(1,-r.val.size(),lenMax), b(r,lenMax);
     /// TODO: fix this iteration count
     for(int i=0;i<30;++i){
-        cout << a.frac<<"!!\n";
-        BigFloat c(2,0);
+        BigFloat c(2,0,lenMax);
         c -= b*a;
+        cout << a.frac<<"!!\n";
         a = a*c;
-        reduce(a.frac.val,a.frac.sign,r.val.size()+5);
     }
-    a = a*BigFloat(*this);
+    a = a*BigFloat(*this,lenMax);
     out.val.resize(a.frac.val.size()-a.offset);
     for(int i=a.offset;i<a.frac.val.size();++i)
         out.val[i-a.offset] = a.frac.val[i];
@@ -237,7 +241,7 @@ void sub(BigInt &l, BigInt const& r)
 		l = r;
 		__sub(l, x); // r - l
 		l.sign = sign;
-		
+
 	}
 
 }
@@ -294,4 +298,3 @@ BigInt BigInt::operator-(BigInt const& r)const{
 }
 
 }
-
