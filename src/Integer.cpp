@@ -67,8 +67,9 @@ BigInt::operator string()const{
     return out;
 }
 
-BigInt operator*(BigInt const& l, BigInt const& r){
-    int len = l.val.size() + r.val.size();
+BigInt BigInt::operator*(BigInt const& r) const{
+    BigInt const& l = *this;
+	int len = l.val.size() + r.val.size();
     if(len&(len-1)) len = 1<<__lg(len<<1);
     vector<complex<long double> > lval(l.val.begin(),l.val.end());
     vector<complex<long double> > rval(r.val.begin(),r.val.end());
