@@ -70,8 +70,9 @@ void __sub(BigInt &l, BigInt const& r)
 }
 
 
-BigInt& operator+=(BigInt& l, BigInt const& r)
+BigInt& BigInt::operator+=(BigInt const& r)
 {
+	BigInt& l = *this;
 	if(l.sign == r.sign)
 		add(l, r);
 	else
@@ -79,8 +80,9 @@ BigInt& operator+=(BigInt& l, BigInt const& r)
 	return l;
 }
 
-BigInt& operator-=(BigInt& l, BigInt const& r)
+BigInt& BigInt::operator-=(BigInt const& r)
 {
+	BigInt& l = *this;
 	if(l.sign == r.sign)
 		sub(l, r);
 	else
@@ -88,16 +90,16 @@ BigInt& operator-=(BigInt& l, BigInt const& r)
 	return l;
 }
 
-BigInt operator+(BigInt const& l, BigInt const& r)
+BigInt BigInt::operator+(BigInt const& r) const
 {
-	BigInt ret(l);
+	BigInt ret(*this);
 	ret += r;
 	return ret;
 }
 
-BigInt operator-(BigInt const& l, BigInt const& r)
+BigInt BigInt::operator-(BigInt const& r) const
 {
-	BigInt ret(l);
+	BigInt ret(*this);
 	ret -= r;
 	return ret;
 }
