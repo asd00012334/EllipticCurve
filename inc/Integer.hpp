@@ -21,8 +21,8 @@ public:
     BigInt();
     BigInt(ll val);
     BigInt(string const& decimal);
-	//BigInt(BigInt const& r);
-	//BigInt& operator=(BigInt const& r);
+    //BigInt(BigInt const& r);
+    //BigInt& operator=(BigInt const& r);
 
     BigInt& operator+=(BigInt const&);
     BigInt& operator-=(BigInt const&);
@@ -67,7 +67,7 @@ public:
         friend ostream& operator<<(ostream& os, Element const& integer);
         friend istream& operator>>(istream& is, Element& integer);
     };
-	Zm(Int const& mod);
+    Zm(Int const& mod);
     Element zero()const;
 
 };
