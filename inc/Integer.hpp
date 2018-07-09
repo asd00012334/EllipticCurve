@@ -55,8 +55,8 @@ public:
         Zm const* type;
         Int val;
     public:
-        Element(Int const& mod);
-        Element(Int const& val, Int const* mod);
+        Element(Zm const* type);
+        Element(Int const& val, Zm const* type);
 
         Element operator+(Element const& r)const;
         Element operator-(Element const& r)const;
@@ -67,7 +67,7 @@ public:
         friend ostream& operator<<(ostream& os, Element const& integer);
         friend istream& operator>>(istream& is, Element& integer);
     };
-	
+	Zm(Int const& mod);
     Element zero()const;
 
 };
