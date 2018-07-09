@@ -51,8 +51,6 @@ template<typename Int>
 class Zm{
     Int mod;
 public:
-    Element zero()const;
-
     class Element{
         Zm const* type;
         Int val;
@@ -69,7 +67,8 @@ public:
         friend ostream& operator<<(ostream& os, Element const& integer);
         friend istream& operator>>(istream& is, Element& integer);
     };
-
+	
+    Element zero()const;
 
 };
 
