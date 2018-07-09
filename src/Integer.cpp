@@ -51,7 +51,11 @@ inline char digitToHex(int digit){
 }
 
 BigInt::BigInt(string const& hexadecimal){
+	if(hexadecimal.empty())
+		throw "empty input";
     sign = hexadecimal[0]!='-';
+	if(!sign && hexadecimal.size() < 2)
+		throw "invalid input";
     ll carry = 0;
     ll base = 1;
     for(int i=hexadecimal.size() - 1; i >= (!sign); --i){
