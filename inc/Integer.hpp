@@ -64,8 +64,14 @@ public:
         Element operator/(Element const& r)const;
         bool operator==(Element const& r)const;
 
-        friend ostream& operator<<(ostream& os, Element const& integer);
-        friend istream& operator>>(istream& is, Element& integer);
+        friend ostream& operator<<(ostream& os, typename Zm<Int>::Element const& integer) {
+			os << integer.val;
+			return os;
+		}
+        friend istream& operator>>(istream& is, typename Zm<Int>::Element& integer) {
+			is >> integer.val;
+			return is;
+		}
     };
     Zm(Int const& mod);
     Element zero()const;
