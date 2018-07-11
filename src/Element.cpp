@@ -72,5 +72,6 @@ bool Zm<Int>::Element::operator==(
 
 
 template class Zm<int>::Element;
+template class Zm<BigInt>::Element;
 
 }	// End namespace ECC
