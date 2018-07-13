@@ -60,6 +60,7 @@ typename Zm<Int>::Element Zm<Int>::Element::operator*(
 	return ret;
 }
 
+/*
 // Only implement for integer.
 template <typename Int>
 Int extended_gcd(Int a, Int mod_in) {
@@ -96,6 +97,7 @@ typename Zm<Int>::Element Zm<Int>::Element::operator/(
 	);
 	return ret*(*this);
 }
+*/
 
 template <typename Int>
 bool Zm<Int>::Element::operator==(
@@ -104,7 +106,6 @@ bool Zm<Int>::Element::operator==(
 	checkMod<Int>(type->mod, r.type->mod);
 	return (val == r.val);
 }
-
 
 template class Zm<int>::Element;
 // template class Zm<BigInt>::Element;
