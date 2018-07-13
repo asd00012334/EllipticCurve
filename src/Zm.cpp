@@ -1,4 +1,4 @@
-#include "../inc/Integer.hpp"
+#include "../inc/Zm.hpp"
 
 namespace ECC {
 
