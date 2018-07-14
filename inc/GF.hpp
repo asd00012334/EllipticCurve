@@ -19,12 +19,13 @@ public:
         RingPoly const* type;
         vector<typename Ring::Element> coef;
         void reduce(){
+            if(r.size()==0) throw std::exception("invalid denominator");
             while(coef.size()>1)
                 if(coef.back().isZero()) coef.pop_back();
                 else break;
         }
-    public:
         Element(): type(nullptr), coef(){}
+    public:
         Element(Element const& r): type(r.type), coef(r.coef){
             if(coef.size()>1 && coef.back().isZero())
                 throw std::exception("ring poly not reduced");
@@ -113,15 +114,44 @@ class FieldPoly: public RingPoly<Field>{
 public:
     class Element: public RingPoly<Field>::Element{
     public:
-        Element operator/=(Element const&);
-        Element operator%=(Element const&);
+        Element& operator/=(Element const& r){
+            return operator=(div(r).first);
+        }
+        Element& operator%=(Element const& r){
+            return operator=(div(r).second);
+        }
 
-        Element operator/(Element const&)const;
-        Element operator%(Element const&)const;
-        pair<Element,Element> div(Element const&)const;
+        Element operator/(Element const& r)const{
+            return div(r).first;
+        }
+        Element operator%(Element const&)const{
+            return div(r).second;
+        }
+        pair<Element,Element> div(Element d)const{
+            /// this(x) = q(x) * d(x) + r(x)
+            d.reduce();
+            Element r = *this, q;
+            q.type = type;
+            q.coef.resize(coef.size()-d.coef.size()+1,type->coefType->zero);
+
+            auto lead = d.coef.back();
+            for(int i=0;i<d.coef.size();++i) d.coef[i] /= lead;
+            for(int i=coef.size()-d.coef.size()-1;i>=0;--i){
+                q[i] = coef[i+d.coef.size()];
+                for(int j=0;j<d.coef.size();++j)
+                    r[i+j] -= c*q[i];
+            }
+            r.reduce();
+            return {q, r};
+        }
     };
 
-    FieldPoly::Element one()const;
+    FieldPoly::Element one()const{
+        Element out;
+        out.type = this;
+        out.coef.resize(1,coefType->one());
+        return out;
+    }
 };
 
 template<typename Field>
