@@ -100,8 +100,8 @@ public:
         }
     };
     RingPoly(Ring const* coefType): coefType(coefType){}
-    RingPoly::Element zero()const{
-        RingPoly::Element out;
+    Element zero()const{
+        Element out;
         out.type = this;
         out.coef.push_back(coefType->zero());
         return out;
@@ -146,7 +146,9 @@ public:
         }
     };
 
-    FieldPoly::Element one()const{
+    FieldPoly(Field const* coefType): RingPoly<Field>(coefType){}
+
+    Element one()const{
         Element out;
         out.type = this;
         out.coef.resize(1,coefType->one());
@@ -157,28 +159,66 @@ public:
 template<typename Field>
 class ExtnField{
 protected:
-    FieldPoly<Field> irr;
+    FieldPoly<Field>::Element irr;
 public:
     class Element{
     protected:
         ExtnField const* type;
-        FieldPoly<Field> val;
+        FieldPoly<Field>::Element val;
     public:
+        Element(Element const& r): type(r.type), val(r.val){}
+        Element(ExtnField const* type, FieldPoly<Field>::Element const& val):
+            type(type), val(val){}
+
         Element inv()const;
 
-        Element operator+=(Element const&);
-        Element operator-=(Element const&);
-        Element operator*=(Element const&);
-        Element operator/=(Element const&);
+        Element& operator+=(Element const& r){
+            val += r.val;
+            val %= type->irr;
+            return *this;
+        }
+        Element& operator-=(Element const& r){
+            val -= r.val;
+            val %= type->irr;
+            return *this;
+        }
+        Element& operator*=(Element const& r){
+            val *= r.val;
+            val %= type->irr;
+            return *this;
+        }
+        Element& operator/=(Element const& r){
+            val *= r.inv().val;
+            val %= type->irr;
+            return *this;
+        }
 
-        Element operator+(Element const&)const;
-        Element operator-(Element const&)const;
-        Element operator*(Element const&)const;
-        Element operator/(Element const&)const;
-        Element& operator=(Element const&);
+        Element operator+(Element const& r)const{
+            return val + r.val;
+        }
+        Element operator-(Element const& r)const{
+            return val - r.val;
+        }
+        Element operator*(Element const& r)const{
+            return (val * r.val) % type->irr;
+        }
+        Element operator/(Element const& r)const{
+            return operator*(r.inv());
+        }
+        Element& operator=(Element const& r){
+            type = r.type;
+            val = r.val;
+            return *this;
+        }
     };
-    ExtnField::Element zero()const;
-    ExtnField::Element one()const;
+    Element zero()const{
+        Element out(this, irr->type->zero());
+        return out;
+    }
+    Element one()const{
+        Element out(this, irr->type->one());
+        return out;
+    }
 
 };
 
