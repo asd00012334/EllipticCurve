@@ -5,6 +5,21 @@
 
 namespace ECC{
 
+template<typename type>
+std::pair<type,type> extGCD(type left, type right){
+    if(left.isZero() && right.isZero()) throw std::logic_error("Return value does not exist.\n");
+    std::pair<type,type> lCor(1,0), rCor(0,1);
+    while(!left.isZero()){
+        std::swap(lCor,rCor);
+        std::swap(left,right);
+        lCor.first -= left/right*rCor.first;
+        lCor.second -= left/right*rCor.second;
+        left %= right;
+    }
+    return rCor;
+}
+
+
 template<typename> class RingPoly;
 template<typename> class FieldPoly;
 template<typename> class ExtnField;
@@ -170,7 +185,9 @@ public:
         Element(ExtnField const* type, FieldPoly<Field>::Element const& val):
             type(type), val(val){}
 
-        Element inv()const;
+        Element inv()const{
+            return extGCD(input,mod).first;
+        }
 
         Element& operator+=(Element const& r){
             val += r.val;
@@ -223,6 +240,8 @@ public:
 };
 
 #define ExtnField GF
+
+
 
 }
 
