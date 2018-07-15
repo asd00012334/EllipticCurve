@@ -34,7 +34,7 @@ public:
         RingPoly const* type;
         vector<typename Ring::Element> coef;
         void reduce(){
-            if(r.size()==0) throw std::exception("invalid denominator");
+            if(coef.size()==0) throw std::exception("invalid denominator");
             while(coef.size()>1)
                 if(coef.back().isZero()) coef.pop_back();
                 else break;
@@ -139,22 +139,22 @@ public:
         Element operator/(Element const& r)const{
             return div(r).first;
         }
-        Element operator%(Element const&)const{
+        Element operator%(Element const& r)const{
             return div(r).second;
         }
         pair<Element,Element> div(Element d)const{
             /// this(x) = q(x) * d(x) + r(x)
             d.reduce();
             Element r = *this, q;
-            q.type = type;
-            q.coef.resize(coef.size()-d.coef.size()+1,type->coefType->zero);
+            q.type = this->type;
+            q.coef.resize(this->coef.size()-d.coef.size()+1,this->type->coefType->zero);
 
             auto lead = d.coef.back();
             for(int i=0;i<d.coef.size();++i) d.coef[i] /= lead;
-            for(int i=coef.size()-d.coef.size()-1;i>=0;--i){
-                q[i] = coef[i+d.coef.size()];
+            for(int i=r.coef.size()-d.coef.size()-1;i>=0;--i){
+                q[i] = r.coef[i+d.coef.size()];
                 for(int j=0;j<d.coef.size();++j)
-                    r[i+j] -= c*q[i];
+                    r[i+j] -= d[j]*q[i];
             }
             r.reduce();
             return {q, r};
@@ -166,7 +166,7 @@ public:
     Element one()const{
         Element out;
         out.type = this;
-        out.coef.resize(1,coefType->one());
+        out.coef.resize(1,this->coefType->one());
         return out;
     }
 };
@@ -174,19 +174,19 @@ public:
 template<typename Field>
 class ExtnField{
 protected:
-    FieldPoly<Field>::Element irr;
+    typename FieldPoly<Field>::Element irr;
 public:
     class Element{
     protected:
         ExtnField const* type;
-        FieldPoly<Field>::Element val;
+        typename FieldPoly<Field>::Element val;
     public:
         Element(Element const& r): type(r.type), val(r.val){}
-        Element(ExtnField const* type, FieldPoly<Field>::Element const& val):
+        Element(ExtnField const* type, typename FieldPoly<Field>::Element const& val):
             type(type), val(val){}
 
         Element inv()const{
-            return extGCD(input,mod).first;
+            return extGCD(val,type->irr).first;
         }
 
         Element& operator+=(Element const& r){
@@ -239,7 +239,7 @@ public:
 
 };
 
-#define ExtnField GF
+template<typename Field> using GF = ExtnField<Field>;
 
 
 
