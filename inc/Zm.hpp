@@ -2,6 +2,7 @@
 #define __ZM_HPP__
 
 #include <bits/stdc++.h>
+#include <gmpxx.h>
 
 namespace ECC {
 
@@ -21,7 +22,6 @@ public:
         Element operator+(Element const& r)const;
         Element operator-(Element const& r)const;
         Element operator*(Element const& r)const;
-        // Element operator/(Element const& r)const;
         bool operator==(Element const& r)const;
 
         friend ostream& operator<<(ostream& os, typename Zm<Int>::Element const& integer) {

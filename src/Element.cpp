@@ -10,7 +10,7 @@ Zm<Int>::Element::Element(Zm<Int> const* type_in) {
 template <typename Int>
 Zm<Int>::Element::Element(Int const& val_in, Zm<Int> const* type_in) {
 	type = type_in;
-	val = val_in%(type->mod);
+	val = (val_in+type->mod)%(type->mod);
 }
 
 template <typename Int>
@@ -107,7 +107,7 @@ bool Zm<Int>::Element::operator==(
 	return (val == r.val);
 }
 
-template class Zm<int>::Element;
-// template class Zm<BigInt>::Element;
+// template class Zm<int>::Element;
+template class Zm<mpz_class>::Element;
 
 }	// End namespace ECC

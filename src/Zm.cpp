@@ -14,7 +14,7 @@ typename Zm<Int>::Element Zm<Int>::zero() const {
 	return tmp;
 }
 
-template class Zm<int>;
-// template class Zm<BigInt>;
+// template class Zm<int>;
+template class Zm<mpz_class>;
 
 }	// End namespace ECC
