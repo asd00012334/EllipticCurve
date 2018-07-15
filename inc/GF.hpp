@@ -30,6 +30,7 @@ protected:
     Ring const* coefType;
 public:
     class Element{
+        friend RingPoly;
     protected:
         RingPoly const* type;
         vector<typename Ring::Element> coef;
@@ -113,6 +114,11 @@ public:
         inline bool operator!=(Element const& r)const{
             return !operator==(r);
         }
+
+        /// getter method
+        inline RingPoly const* getType()const{
+            return type;
+        }
     };
     RingPoly(Ring const* coefType): coefType(coefType){}
     Element zero()const{
@@ -121,13 +127,17 @@ public:
         out.coef.push_back(coefType->zero());
         return out;
     }
-
+    /// getter method
+    inline Ring const* getCoefType()const{
+        return coefType;
+    }
 };
 
 template<typename Field>
 class FieldPoly: public RingPoly<Field>{
 public:
     class Element: public RingPoly<Field>::Element{
+        friend FieldPoly;
     public:
         Element& operator/=(Element const& r){
             return operator=(div(r).first);
@@ -147,7 +157,7 @@ public:
             d.reduce();
             Element r = *this, q;
             q.type = this->type;
-            q.coef.resize(this->coef.size()-d.coef.size()+1,this->type->coefType->zero);
+            q.coef.resize(this->coef.size()-d.coef.size()+1,this->type->getCoefType()->zero());
 
             auto lead = d.coef.back();
             for(int i=0;i<d.coef.size();++i) d.coef[i] /= lead;
@@ -177,6 +187,7 @@ protected:
     typename FieldPoly<Field>::Element irr;
 public:
     class Element{
+        friend ExtnField;
     protected:
         ExtnField const* type;
         typename FieldPoly<Field>::Element val;
@@ -186,27 +197,27 @@ public:
             type(type), val(val){}
 
         Element inv()const{
-            return extGCD(val,type->irr).first;
+            return extGCD(val,type->getIrr()).first;
         }
 
         Element& operator+=(Element const& r){
             val += r.val;
-            val %= type->irr;
+            val %= type->getIrr();
             return *this;
         }
         Element& operator-=(Element const& r){
             val -= r.val;
-            val %= type->irr;
+            val %= type->getIrr();
             return *this;
         }
         Element& operator*=(Element const& r){
             val *= r.val;
-            val %= type->irr;
+            val %= type->getIrr();
             return *this;
         }
         Element& operator/=(Element const& r){
             val *= r.inv().val;
-            val %= type->irr;
+            val %= type->getIrr();
             return *this;
         }
 
@@ -227,16 +238,25 @@ public:
             val = r.val;
             return *this;
         }
+
+        /// getter method
+        inline ExtnField const* getType(){
+            return type;
+        }
     };
     Element zero()const{
-        Element out(this, irr->type->zero());
+        Element out(this, irr->getType()->zero());
         return out;
     }
     Element one()const{
-        Element out(this, irr->type->one());
+        Element out(this, irr->getType->one());
         return out;
     }
 
+    /// getter method
+    inline typename FieldPoly<Field>::Element const& getIrr()const{
+        return irr;
+    }
 };
 
 template<typename Field> using GF = ExtnField<Field>;
