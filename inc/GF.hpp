@@ -249,7 +249,7 @@ public:
         return out;
     }
     Element one()const{
-        Element out(this, irr->getType->one());
+        Element out(this, irr->getType()->one());
         return out;
     }
 
