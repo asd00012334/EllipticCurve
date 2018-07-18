@@ -13,16 +13,21 @@ class Zm{
     Int mod;
 public:
     class Element{
-        Zm const* type;
-        Int val;
-    public:
+	protected:
+		Zm const* type;
+		Int val;
+	public:
         Element(Zm const* type);
         Element(Int const& val, Zm const* type);
+		~Element() { type = NULL; }
 
         Element operator+(Element const& r)const;
         Element operator-(Element const& r)const;
         Element operator*(Element const& r)const;
         bool operator==(Element const& r)const;
+		
+		Zm const* get_type()const { return type; }
+		Int const get_val()const { return val; }
 
         friend ostream& operator<<(ostream& os, typename Zm<Int>::Element const& integer) {
 			os << integer.val;
@@ -34,8 +39,8 @@ public:
 		}
     };
     Zm(Int const& mod);
+	Int const get_mod()const { return mod; }
     Element zero()const;
-
 };
 
 }
