@@ -14,10 +14,10 @@ class Zp : public Zm<Int> {
 public:
 	class Element: public Zm<Int>::Element {
 	public:
-		Element(Zm<Int> const* type);
-		Element(typename Zm<Int>::Element const& e);
-		Element(Int const& val, Zm<Int> const* type);
-		~Element() { Zm<Int>::Element::type = NULL; }
+		Element(Zp const* type);
+		Element(typename Zp::Element const& e);
+		Element(Int const& val, Zp const* type);
+		~Element() { Zp::Element::type = NULL; }
 
 		Element operator/(Element const& r)const;
 
@@ -49,15 +49,15 @@ typename Zp<Int>::Element Zp<Int>::zero()const {
 }
 
 template <typename Int>
-Zp<Int>::Element::Element(Zm<Int> const* type_in)
+Zp<Int>::Element::Element(Zp<Int> const* type_in)
 	: Zm<Int>::Element(type_in) {}
 
 template <typename Int>
-Zp<Int>::Element::Element(typename Zm<Int>::Element const& e)
+Zp<Int>::Element::Element(typename Zp<Int>::Element const& e)
 	: Zm<Int>::Element(e.get_val(), e.get_type()) {}
 
 template <typename Int>
-Zp<Int>::Element::Element(Int const& val_in, Zm<Int> const* type_in)
+Zp<Int>::Element::Element(Int const& val_in, Zp<Int> const* type_in)
 	: Zm<Int>::Element(val_in, type_in) {}
 
 template <typename Int>

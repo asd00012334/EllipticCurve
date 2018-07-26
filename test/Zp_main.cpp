@@ -13,13 +13,14 @@ int main()
 	
 	while(1)
 	{
-		string a, op, b;
-		cin >> a >> op >> b;
+		string op;
 		mpz_class A, B;
-		A = a;
-		B = b;
+		cin >> A >> op >> B;
 		Zp<mpz_class>::Element AE(A, &Zn), BE(B, &Zn);
 		if(op == "+")
-			cout << (AE + BE) << endl;
+		{
+			Zp<mpz_class>::Element CE(AE + BE);
+			cout << CE << endl;
+		}
 	}
 }

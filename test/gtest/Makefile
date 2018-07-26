@@ -31,7 +31,7 @@ CXXFLAGS += -std=c++14 -g -Wall -Wextra -pthread -lgmp -lgmpxx
 
 # All tests produced by this Makefile.  Remember to add new tests you
 # created to the list.
-TESTS = Zm_unittest 
+TESTS = Zm_unittest #Zp_unittest
 
 # All Google Test headers.  Usually you shouldn't change this
 # definition.
@@ -76,12 +76,10 @@ gtest_main.a : gtest-all.o gtest_main.o
 
 GCOVFLAGS += -fprofile-arcs -ftest-coverage
 
+## Zm
 
 Zm_unittest.o : Zm_unittest.cpp $(GTEST_HEADERS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(GCOVFLAGS) -I $(INC) -c $< 
-
-#yenck.o : $(SRC)/yenck.cpp $(GTEST_HEADERS)
-# $(CXX) $(CPPFLAGS) $(CXXFLAGS) $(GCOVFLAGS) -I $(INC) -c $<
 
 Zm.o : $(SRC)/Zm.cpp $(GTEST_HEADERS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(GCOVFLAGS) -I $(INC) -c $<
@@ -90,6 +88,14 @@ ZmElement.o : $(SRC)/ZmElement.cpp $(GTEST_HEADERS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(GCOVFLAGS) -I $(INC) -c $<
 
 Zm_unittest : Zm.o ZmElement.o Zm_unittest.o  gtest_main.a
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(GCOVFLAGS) -lpthread $^ -o $@
+
+## Zp
+
+Zp_unittest.o : Zp_unittest.cpp $(GTEST_HEADERS)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(GCOVFLAGS) -I $(INC) -c $< 
+
+Zp_unittest : Zp_unittest.o Zm.o ZmElement.o gtest_main.a
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(GCOVFLAGS) -lpthread $^ -o $@
 
 run: $(TESTS)

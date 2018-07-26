@@ -1,4 +1,4 @@
-#include "../inc/Zm.hpp"
+#include "Zm.hpp"
 
 namespace ECC {
 
