@@ -72,7 +72,7 @@ template <typename Int>
 typename Zp<Int>::Element Zp<Int>::Element::operator+(
 	typename Zp<Int>::Element const& r) const 
 {
-	typename Zm<Int>::Element ret(
+	Element ret(
 		(typename Zm<Int>::Element) (*this) +
 		(typename Zm<Int>::Element) r
 	);
@@ -83,7 +83,7 @@ template <typename Int>
 typename Zp<Int>::Element Zp<Int>::Element::operator-(
 	typename Zp<Int>::Element const& r) const 
 {
-	typename Zm<Int>::Element ret(
+	Element ret(
 		(typename Zm<Int>::Element) (*this) -
 		(typename Zm<Int>::Element) r
 	);
@@ -94,7 +94,7 @@ template <typename Int>
 typename Zp<Int>::Element Zp<Int>::Element::operator*(
 	typename Zp<Int>::Element const& r) const 
 {
-	typename Zm<Int>::Element ret(
+	Element ret(
 		(typename Zm<Int>::Element) (*this) *
 		(typename Zm<Int>::Element) r
 	);
