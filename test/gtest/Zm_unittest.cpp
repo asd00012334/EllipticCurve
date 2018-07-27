@@ -39,7 +39,7 @@ TEST(ZmTest, contruct_and_output)
 struct TestCase{
 	string op1, op2, ans;
 };
-#define TEST_OP(cases, op) \
+#define TEST_OP(cases,op) \
 	for (auto &it: (cases)) { \
 		BigInt op1, op2, ans; \
 		op1 = it.op1; \

@@ -1,17 +1,14 @@
-CXX = g++
-FLAGS = 
-INC = -I ./inc/
+LIB = -lgmp -lgmpxx
+INC = inc
 
-RM = rm -f
+build: cleanObj
+	for x in `ls src/*.cpp` ; do \
+		echo $$x ;\
+		y=`echo $$x | cut -d'/' -f2`; \
+		z=`echo $$y | cut -d'.' -f1`; \
+		g++ $$x -o obj/$$z.o -c $(LIB) -I $(INC); \
+	done;
 
-all: src/main.cpp src/Integer.cpp src/yenck.cpp
-	$(CXX) $(FLAGS) $(INC) $^ -o bin/main
+cleanObj:
+	rm -f obj/*
 
-run: bin/main
-	bin/main
-
-test: test/test.sh bin/main
-	test/test.sh
-
-clean:
-	$(RM) bin/main
