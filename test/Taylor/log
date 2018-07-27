@@ -1,0 +1,54 @@
+ls ../../obj/*.o
+../../obj/ZmElement.o
+../../obj/Zm.o
+make -C ../../ build
+make[1]: Entering directory '/mnt/d/交大/C程式/ECC/EllipticCurve'
+rm -f obj/*
+for x in `ls src/*.cpp` ; do \
+	echo $x ;\
+	y=`echo $x | cut -d'/' -f2`; \
+	z=`echo $y | cut -d'.' -f1`; \
+	g++ $x -o obj/$z.o -c -lgmp -lgmpxx -I inc; \
+done;
+src/Zm.cpp
+src/ZmElement.cpp
+make[1]: Leaving directory '/mnt/d/交大/C程式/ECC/EllipticCurve'
+g++ -std=c++14 -lgmp -lgmpxx -I ../../inc ../../obj/*.o test.cpp -o test
+../../obj/Zm.o: In function `__gmp_expr<__mpz_struct [1], __mpz_struct [1]>::init_si(long)':
+Zm.cpp:(.text._ZN10__gmp_exprIA1_12__mpz_structS1_E7init_siEl[_ZN10__gmp_exprIA1_12__mpz_structS1_E7init_siEl]+0x1f): undefined reference to `__gmpz_init_set_si'
+../../obj/Zm.o: In function `__gmp_expr<__mpz_struct [1], __mpz_struct [1]>::__gmp_expr()':
+Zm.cpp:(.text._ZN10__gmp_exprIA1_12__mpz_structS1_EC2Ev[_ZN10__gmp_exprIA1_12__mpz_structS1_EC5Ev]+0x14): undefined reference to `__gmpz_init'
+../../obj/Zm.o: In function `__gmp_expr<__mpz_struct [1], __mpz_struct [1]>::__gmp_expr(__gmp_expr<__mpz_struct [1], __mpz_struct [1]> const&)':
+Zm.cpp:(.text._ZN10__gmp_exprIA1_12__mpz_structS1_EC2ERKS2_[_ZN10__gmp_exprIA1_12__mpz_structS1_EC5ERKS2_]+0x1f): undefined reference to `__gmpz_init_set'
+../../obj/Zm.o: In function `__gmp_expr<__mpz_struct [1], __mpz_struct [1]>::~__gmp_expr()':
+Zm.cpp:(.text._ZN10__gmp_exprIA1_12__mpz_structS1_ED2Ev[_ZN10__gmp_exprIA1_12__mpz_structS1_ED5Ev]+0x14): undefined reference to `__gmpz_clear'
+../../obj/Zm.o: In function `__gmp_expr<__mpz_struct [1], __mpz_struct [1]>::operator=(__gmp_expr<__mpz_struct [1], __mpz_struct [1]> const&)':
+Zm.cpp:(.text._ZN10__gmp_exprIA1_12__mpz_structS1_EaSERKS2_[_ZN10__gmp_exprIA1_12__mpz_structS1_EaSERKS2_]+0x1f): undefined reference to `__gmpz_set'
+../../obj/ZmElement.o: In function `__gmp_binary_plus::eval(__mpz_struct*, __mpz_struct const*, __mpz_struct const*)':
+ZmElement.cpp:(.text._ZN17__gmp_binary_plus4evalEP12__mpz_structPKS0_S3_[_ZN17__gmp_binary_plus4evalEP12__mpz_structPKS0_S3_]+0x27): undefined reference to `__gmpz_add'
+../../obj/ZmElement.o: In function `__gmp_binary_minus::eval(__mpz_struct*, __mpz_struct const*, __mpz_struct const*)':
+ZmElement.cpp:(.text._ZN18__gmp_binary_minus4evalEP12__mpz_structPKS0_S3_[_ZN18__gmp_binary_minus4evalEP12__mpz_structPKS0_S3_]+0x27): undefined reference to `__gmpz_sub'
+../../obj/ZmElement.o: In function `__gmp_binary_multiplies::eval(__mpz_struct*, __mpz_struct const*, __mpz_struct const*)':
+ZmElement.cpp:(.text._ZN23__gmp_binary_multiplies4evalEP12__mpz_structPKS0_S3_[_ZN23__gmp_binary_multiplies4evalEP12__mpz_structPKS0_S3_]+0x27): undefined reference to `__gmpz_mul'
+../../obj/ZmElement.o: In function `__gmp_binary_modulus::eval(__mpz_struct*, __mpz_struct const*, __mpz_struct const*)':
+ZmElement.cpp:(.text._ZN20__gmp_binary_modulus4evalEP12__mpz_structPKS0_S3_[_ZN20__gmp_binary_modulus4evalEP12__mpz_structPKS0_S3_]+0x27): undefined reference to `__gmpz_tdiv_r'
+../../obj/ZmElement.o: In function `__gmp_binary_equal::eval(__mpz_struct const*, __mpz_struct const*)':
+ZmElement.cpp:(.text._ZN18__gmp_binary_equal4evalEPK12__mpz_structS2_[_ZN18__gmp_binary_equal4evalEPK12__mpz_structS2_]+0x1f): undefined reference to `__gmpz_cmp'
+../../obj/ZmElement.o: In function `__gmp_expr<__mpz_struct [1], __mpz_struct [1]>::__gmp_expr<__gmp_binary_expr<__gmp_expr<__mpz_struct [1], __gmp_binary_expr<__gmp_expr<__mpz_struct [1], __mpz_struct [1]>, __gmp_expr<__mpz_struct [1], __mpz_struct [1]>, __gmp_binary_plus> >, __gmp_expr<__mpz_struct [1], __mpz_struct [1]>, __gmp_binary_modulus> >(__gmp_expr<__mpz_struct [1], __gmp_binary_expr<__gmp_expr<__mpz_struct [1], __gmp_binary_expr<__gmp_expr<__mpz_struct [1], __mpz_struct [1]>, __gmp_expr<__mpz_struct [1], __mpz_struct [1]>, __gmp_binary_plus> >, __gmp_expr<__mpz_struct [1], __mpz_struct [1]>, __gmp_binary_modulus> > const&)':
+ZmElement.cpp:(.text._ZN10__gmp_exprIA1_12__mpz_structS1_EC2I17__gmp_binary_exprIS_IS1_S4_IS2_S2_17__gmp_binary_plusEES2_20__gmp_binary_modulusEEERKS_IS1_T_E[_ZN10__gmp_exprIA1_12__mpz_structS1_EC5I17__gmp_binary_exprIS_IS1_S4_IS2_S2_17__gmp_binary_plusEES2_20__gmp_binary_modulusEEERKS_IS1_T_E]+0x18): undefined reference to `__gmpz_init'
+../../obj/ZmElement.o: In function `__gmp_expr<__mpz_struct [1], __mpz_struct [1]>::__gmp_expr<__gmp_binary_expr<__gmp_expr<__mpz_struct [1], __gmp_binary_expr<__gmp_expr<__mpz_struct [1], __gmp_binary_expr<__gmp_expr<__mpz_struct [1], __mpz_struct [1]>, __gmp_expr<__mpz_struct [1], __mpz_struct [1]>, __gmp_binary_minus> >, __gmp_expr<__mpz_struct [1], __mpz_struct [1]>, __gmp_binary_plus> >, __gmp_expr<__mpz_struct [1], __mpz_struct [1]>, __gmp_binary_modulus> >(__gmp_expr<__mpz_struct [1], __gmp_binary_expr<__gmp_expr<__mpz_struct [1], __gmp_binary_expr<__gmp_expr<__mpz_struct [1], __gmp_binary_expr<__gmp_expr<__mpz_struct [1], __mpz_struct [1]>, __gmp_expr<__mpz_struct [1], __mpz_struct [1]>, __gmp_binary_minus> >, __gmp_expr<__mpz_struct [1], __mpz_struct [1]>, __gmp_binary_plus> >, __gmp_expr<__mpz_struct [1], __mpz_struct [1]>, __gmp_binary_modulus> > const&)':
+ZmElement.cpp:(.text._ZN10__gmp_exprIA1_12__mpz_structS1_EC2I17__gmp_binary_exprIS_IS1_S4_IS_IS1_S4_IS2_S2_18__gmp_binary_minusEES2_17__gmp_binary_plusEES2_20__gmp_binary_modulusEEERKS_IS1_T_E[_ZN10__gmp_exprIA1_12__mpz_structS1_EC5I17__gmp_binary_exprIS_IS1_S4_IS_IS1_S4_IS2_S2_18__gmp_binary_minusEES2_17__gmp_binary_plusEES2_20__gmp_binary_modulusEEERKS_IS1_T_E]+0x18): undefined reference to `__gmpz_init'
+../../obj/ZmElement.o: In function `__gmp_expr<__mpz_struct [1], __mpz_struct [1]>::__gmp_expr<__gmp_binary_expr<__gmp_expr<__mpz_struct [1], __gmp_binary_expr<__gmp_expr<__mpz_struct [1], __mpz_struct [1]>, __gmp_expr<__mpz_struct [1], __mpz_struct [1]>, __gmp_binary_multiplies> >, __gmp_expr<__mpz_struct [1], __mpz_struct [1]>, __gmp_binary_modulus> >(__gmp_expr<__mpz_struct [1], __gmp_binary_expr<__gmp_expr<__mpz_struct [1], __gmp_binary_expr<__gmp_expr<__mpz_struct [1], __mpz_struct [1]>, __gmp_expr<__mpz_struct [1], __mpz_struct [1]>, __gmp_binary_multiplies> >, __gmp_expr<__mpz_struct [1], __mpz_struct [1]>, __gmp_binary_modulus> > const&)':
+ZmElement.cpp:(.text._ZN10__gmp_exprIA1_12__mpz_structS1_EC2I17__gmp_binary_exprIS_IS1_S4_IS2_S2_23__gmp_binary_multipliesEES2_20__gmp_binary_modulusEEERKS_IS1_T_E[_ZN10__gmp_exprIA1_12__mpz_structS1_EC5I17__gmp_binary_exprIS_IS1_S4_IS2_S2_23__gmp_binary_multipliesEES2_20__gmp_binary_modulusEEERKS_IS1_T_E]+0x18): undefined reference to `__gmpz_init'
+../../obj/ZmElement.o: In function `__gmp_expr<__mpz_struct [1], __mpz_struct [1]>::__gmp_expr<__gmp_binary_expr<__gmp_expr<__mpz_struct [1], __mpz_struct [1]>, __gmp_expr<__mpz_struct [1], __mpz_struct [1]>, __gmp_binary_plus> >(__gmp_expr<__mpz_struct [1], __gmp_binary_expr<__gmp_expr<__mpz_struct [1], __mpz_struct [1]>, __gmp_expr<__mpz_struct [1], __mpz_struct [1]>, __gmp_binary_plus> > const&)':
+ZmElement.cpp:(.text._ZN10__gmp_exprIA1_12__mpz_structS1_EC2I17__gmp_binary_exprIS2_S2_17__gmp_binary_plusEEERKS_IS1_T_E[_ZN10__gmp_exprIA1_12__mpz_structS1_EC5I17__gmp_binary_exprIS2_S2_17__gmp_binary_plusEEERKS_IS1_T_E]+0x18): undefined reference to `__gmpz_init'
+../../obj/ZmElement.o: In function `__gmp_expr<__mpz_struct [1], __mpz_struct [1]>::__gmp_expr<__gmp_binary_expr<__gmp_expr<__mpz_struct [1], __gmp_binary_expr<__gmp_expr<__mpz_struct [1], __mpz_struct [1]>, __gmp_expr<__mpz_struct [1], __mpz_struct [1]>, __gmp_binary_minus> >, __gmp_expr<__mpz_struct [1], __mpz_struct [1]>, __gmp_binary_plus> >(__gmp_expr<__mpz_struct [1], __gmp_binary_expr<__gmp_expr<__mpz_struct [1], __gmp_binary_expr<__gmp_expr<__mpz_struct [1], __mpz_struct [1]>, __gmp_expr<__mpz_struct [1], __mpz_struct [1]>, __gmp_binary_minus> >, __gmp_expr<__mpz_struct [1], __mpz_struct [1]>, __gmp_binary_plus> > const&)':
+ZmElement.cpp:(.text._ZN10__gmp_exprIA1_12__mpz_structS1_EC2I17__gmp_binary_exprIS_IS1_S4_IS2_S2_18__gmp_binary_minusEES2_17__gmp_binary_plusEEERKS_IS1_T_E[_ZN10__gmp_exprIA1_12__mpz_structS1_EC5I17__gmp_binary_exprIS_IS1_S4_IS2_S2_18__gmp_binary_minusEES2_17__gmp_binary_plusEEERKS_IS1_T_E]+0x18): undefined reference to `__gmpz_init'
+../../obj/ZmElement.o:ZmElement.cpp:(.text._ZN10__gmp_exprIA1_12__mpz_structS1_EC2I17__gmp_binary_exprIS2_S2_23__gmp_binary_multipliesEEERKS_IS1_T_E[_ZN10__gmp_exprIA1_12__mpz_structS1_EC5I17__gmp_binary_exprIS2_S2_23__gmp_binary_multipliesEEERKS_IS1_T_E]+0x18): more undefined references to `__gmpz_init' follow
+/tmp/cc1GtAoN.o: In function `ECC::Zp<__gmp_expr<__mpz_struct [1], __mpz_struct [1]> >::Zp(__gmp_expr<__mpz_struct [1], __mpz_struct [1]> const&)':
+test.cpp:(.text._ZN3ECC2ZpI10__gmp_exprIA1_12__mpz_structS3_EEC2ERKS4_[_ZN3ECC2ZpI10__gmp_exprIA1_12__mpz_structS3_EEC5ERKS4_]+0x39): undefined reference to `__gmpz_probab_prime_p'
+/tmp/cc1GtAoN.o: In function `std::ostream& operator<< <__mpz_struct [1], __mpz_struct [1]>(std::ostream&, __gmp_expr<__mpz_struct [1], __mpz_struct [1]> const&)':
+test.cpp:(.text._ZlsIA1_12__mpz_structS1_ERSoS2_RK10__gmp_exprIT_T0_E[_ZlsIA1_12__mpz_structS1_ERSoS2_RK10__gmp_exprIT_T0_E]+0x32): undefined reference to `operator<<(std::ostream&, __mpz_struct const*)'
+collect2: error: ld returned 1 exit status
+Makefile:11: recipe for target 'build' failed
+make: *** [build] Error 1
