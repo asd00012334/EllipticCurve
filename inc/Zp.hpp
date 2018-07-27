@@ -13,12 +13,16 @@ template <typename Int>
 class Zp : public Zm<Int> {	
 public:
 	class Element: public Zm<Int>::Element {
-	public:
-		Element(Zm<Int> const* type);
 		Element(typename Zm<Int>::Element const& e);
 		Element(Int const& val, Zm<Int> const* type);
+	public:
+		Element(Zp const* type);
+		Element(Int const& val, Zp const* type);
 		~Element() { Zm<Int>::Element::type = NULL; }
 
+		Element operator+(Element const& r)const;
+		Element operator-(Element const& r)const;
+		Element operator*(Element const& r)const;
 		Element operator/(Element const& r)const;
 
 		friend ostream& operator<<(ostream& os, typename Zp<Int>::Element const& integer) {
@@ -49,8 +53,12 @@ typename Zp<Int>::Element Zp<Int>::zero()const {
 }
 
 template <typename Int>
-Zp<Int>::Element::Element(Zm<Int> const* type_in)
+Zp<Int>::Element::Element(Zp<Int> const* type_in)
 	: Zm<Int>::Element(type_in) {}
+
+template <typename Int>
+Zp<Int>::Element::Element(Int const& val_in, Zp<Int> const* type_in)
+	: Zm<Int>::Element(val_in, type_in) {}
 
 template <typename Int>
 Zp<Int>::Element::Element(typename Zm<Int>::Element const& e)
@@ -61,7 +69,42 @@ Zp<Int>::Element::Element(Int const& val_in, Zm<Int> const* type_in)
 	: Zm<Int>::Element(val_in, type_in) {}
 
 template <typename Int>
-typename Zp<Int>::Element Zp<Int>::Element::operator/(typename Zp<Int>::Element const& r)const {
+typename Zp<Int>::Element Zp<Int>::Element::operator+(
+	typename Zp<Int>::Element const& r) const 
+{
+	typename Zm<Int>::Element ret(
+		(typename Zm<Int>::Element) (*this) +
+		(typename Zm<Int>::Element) r
+	);
+	return ret;
+}
+
+template <typename Int>
+typename Zp<Int>::Element Zp<Int>::Element::operator-(
+	typename Zp<Int>::Element const& r) const 
+{
+	typename Zm<Int>::Element ret(
+		(typename Zm<Int>::Element) (*this) -
+		(typename Zm<Int>::Element) r
+	);
+	return ret;
+}
+
+template <typename Int>
+typename Zp<Int>::Element Zp<Int>::Element::operator*(
+	typename Zp<Int>::Element const& r) const 
+{
+	typename Zm<Int>::Element ret(
+		(typename Zm<Int>::Element) (*this) *
+		(typename Zm<Int>::Element) r
+	);
+	return ret;
+}
+
+template <typename Int>
+typename Zp<Int>::Element Zp<Int>::Element::operator/(
+	typename Zp<Int>::Element const& r) const 
+{
 	mpz_class g(1);
 	mpz_t s, t;
 	
@@ -70,9 +113,9 @@ typename Zp<Int>::Element Zp<Int>::Element::operator/(typename Zp<Int>::Element 
 	mpz_gcdext (g.get_mpz_t(), s, t, r.val.get_mpz_t(), r.type->get_mod().get_mpz_t());
 	
 	Element r_inv(mpz_class(s), this->type);
-	Element ret((*this)*r_inv);
+	// Element ret((*this)*r_inv);
 
-	return ret;
+	return ((*this)*r_inv);
 }
 
 }	// End namespace ECC
