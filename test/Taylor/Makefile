@@ -10,7 +10,7 @@ test: build
 build:
 	ls $(OBJ)
 	make -C ../../ build
-	$(GCC) $(LIB) $(INC) $(OBJ) test.cpp -o test
+	$(GCC) $(INC) test.cpp $(OBJ) -o test $(LIB)
 
 clean:
 	rm -f test
